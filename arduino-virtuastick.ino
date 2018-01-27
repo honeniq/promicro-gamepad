@@ -49,6 +49,13 @@ int lastDpadState[4] = {0,0,0,0}; // Up, Right, Down, Left
 int lastButtonState[6] = {0,0,0,0,0,0};
 
 void loop() {
+  updateDpad();
+  updateButton();
+
+  delay(10);
+}
+
+void updateDpad() {
   for (int i = 0; i <= 3; i++) {
     int currentDpadState = !digitalRead(i + 18);
     if (currentDpadState != lastDpadState[i]) {
@@ -69,7 +76,9 @@ void loop() {
       lastDpadState[i] = currentDpadState;
     }
   }
+}
 
+void updateButton() {
   for (int i = 0; i <= 5; i++) {
     int currentButtonState = !digitalRead(i + 2);
     if (currentButtonState != lastButtonState[i]) {
@@ -77,5 +86,4 @@ void loop() {
       lastButtonState[i] = currentButtonState;
     }
   }
-  delay(10);
 }
