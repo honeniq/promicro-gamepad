@@ -18,7 +18,7 @@
 #include <Joystick.h>
 
 Joystick_ Joystick(JOYSTICK_DEFAULT_REPORT_ID,JOYSTICK_TYPE_GAMEPAD,
-  2, 0,                  // Button Count, Hat Switch Count
+  6, 0,                  // Button Count, Hat Switch Count
   true, true, false,     // X and Y, but no Z Axis
   false, false, false,   // No Rx, Ry, or Rz
   false, false,          // No rudder or throttle
@@ -30,6 +30,11 @@ void setup() {
   pinMode(19, INPUT_PULLUP);
   pinMode(20, INPUT_PULLUP);
   pinMode(21, INPUT_PULLUP);
+
+  pinMode(2, INPUT_PULLUP);
+  pinMode(3, INPUT_PULLUP);
+  pinMode(4, INPUT_PULLUP);
+  pinMode(5, INPUT_PULLUP);
   pinMode(6, INPUT_PULLUP);
   pinMode(7, INPUT_PULLUP);
 
@@ -40,28 +45,36 @@ void setup() {
 }
 
 // Last state of the buttons
-int lastArrowState[4] = {0,0,0,0};
+int lastDpadState[4] = {0,0,0,0}; // Up, Right, Down, Left
 int lastButtonState[6] = {0,0,0,0,0,0};
 
 void loop() {
   for (int i = 0; i <= 3; i++) {
-    int currentArrowState = !digitalRead(i + 18);
-    if (currentArrowState != lastArrowState[i]) {
+    int currentDpadState = !digitalRead(i + 18);
+    if (currentDpadState != lastDpadState[i]) {
       switch (i) {
         case 0:
-          Joystick.setYAxis(-currentArrowState);
+          Joystick.setYAxis(-currentDpadState);
           break;
         case 1:
-          Joystick.setXAxis(currentArrowState);
+          Joystick.setXAxis(currentDpadState);
           break;
         case 2:
-          Joystick.setYAxis(currentArrowState);
+          Joystick.setYAxis(currentDpadState);
           break;
         case 3:
-          Joystick.setXAxis(-currentArrowState);
+          Joystick.setXAxis(-currentDpadState);
           break;
       }
-      lastArrowState[i] = currentArrowState;
+      lastDpadState[i] = currentDpadState;
+    }
+  }
+
+  for (int i = 0; i <= 5; i++) {
+    int currentButtonState = !digitalRead(i + 2);
+    if (currentButtonState != lastButtonState[i]) {
+      Joystick.setButton(i, currentButtonState);
+      lastButtonState[i] = currentButtonState;
     }
   }
   delay(10);
