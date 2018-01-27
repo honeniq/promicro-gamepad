@@ -1,4 +1,4 @@
-# arduino_virtuastick
+# promicro-gamepad
 
 ## Depends on
 
