@@ -40,28 +40,28 @@ void setup() {
 }
 
 // Last state of the buttons
-int lastArrowState[4] = {0, 0, 0, 0};
+int lastArrowState[4] = {0,0,0,0};
 int lastButtonState[6] = {0,0,0,0,0,0};
 
 void loop() {
-  for (int i = 0; i <= 4; i++) {
-    int currentButtonState = !digitalRead(i + 18);
-    if (currentButtonState != lastButtonState[i]) {
+  for (int i = 0; i <= 3; i++) {
+    int currentArrowState = !digitalRead(i + 18);
+    if (currentArrowState != lastArrowState[i]) {
       switch (i) {
         case 0:
-          Joystick.setYAxis(-currentButtonState);
+          Joystick.setYAxis(-currentArrowState);
           break;
         case 1:
-          Joystick.setXAxis(currentButtonState);
+          Joystick.setXAxis(currentArrowState);
           break;
         case 2:
-          Joystick.setYAxis(currentButtonState);
+          Joystick.setYAxis(currentArrowState);
           break;
         case 3:
-          Joystick.setXAxis(-currentButtonState);
+          Joystick.setXAxis(-currentArrowState);
           break;
       }
-      lastButtonState[i] = currentButtonState;
+      lastArrowState[i] = currentArrowState;
     }
   }
   delay(10);
