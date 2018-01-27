@@ -1,21 +1,7 @@
-// Simple gamepad example that demonstraits how to read five Arduino
-// digital pins and map them to the Arduino Joystick library.
-//
-// The digital pins 2 - 6 are grounded when they are pressed.
-// Pin 2 = UP
-// Pin 3 = RIGHT
-// Pin 4 = DOWN
-// Pin 5 = LEFT
-// Pin 6 = FIRE
-//
-// NOTE: This sketch file is for use with Arduino Leonardo and
-//       Arduino Micro only.
-//
-// by Matthew Heironimus
-// 2016-11-24
-//--------------------------------------------------------------------
-
 #include <Joystick.h>
+
+#define OFFSET_DPAD 18
+#define OFFSET_BUTTON 2
 
 Joystick_ Joystick(JOYSTICK_DEFAULT_REPORT_ID,JOYSTICK_TYPE_GAMEPAD,
   6, 0,                  // Button Count, Hat Switch Count
@@ -26,17 +12,16 @@ Joystick_ Joystick(JOYSTICK_DEFAULT_REPORT_ID,JOYSTICK_TYPE_GAMEPAD,
 
 void setup() {
   // Initialize Button Pins
-  pinMode(18, INPUT_PULLUP);
-  pinMode(19, INPUT_PULLUP);
-  pinMode(20, INPUT_PULLUP);
-  pinMode(21, INPUT_PULLUP);
-
-  pinMode(2, INPUT_PULLUP);
-  pinMode(3, INPUT_PULLUP);
-  pinMode(4, INPUT_PULLUP);
-  pinMode(5, INPUT_PULLUP);
-  pinMode(6, INPUT_PULLUP);
-  pinMode(7, INPUT_PULLUP);
+  pinMode(18, INPUT_PULLUP); // D-pad Up
+  pinMode(19, INPUT_PULLUP); // D-pad Right
+  pinMode(20, INPUT_PULLUP); // D-pad Down
+  pinMode(21, INPUT_PULLUP); // D-pad Left
+  pinMode(2, INPUT_PULLUP);  // Button 1
+  pinMode(3, INPUT_PULLUP);  // Button 2
+  pinMode(4, INPUT_PULLUP);  // Button 3
+  pinMode(5, INPUT_PULLUP);  // Button 4
+  pinMode(6, INPUT_PULLUP);  // Button 5
+  pinMode(7, INPUT_PULLUP);  // Button 6
 
   // Initialize Joystick Library
   Joystick.begin();
@@ -45,8 +30,8 @@ void setup() {
 }
 
 // Last state of the buttons
-int lastDpadState[4] = {0,0,0,0}; // Up, Right, Down, Left
-int lastButtonState[6] = {0,0,0,0,0,0};
+int lastDpadState[4] = {0,0,0,0};        // Up, Right, Down, Left
+int lastButtonState[6] = {0,0,0,0,0,0};  // Button 1 - 6
 
 void loop() {
   updateDpad();
@@ -57,7 +42,7 @@ void loop() {
 
 void updateDpad() {
   for (int i = 0; i <= 3; i++) {
-    int currentDpadState = !digitalRead(i + 18);
+    int currentDpadState = !digitalRead(i + OFFSET_DPAD);
     if (currentDpadState != lastDpadState[i]) {
       switch (i) {
         case 0:
@@ -80,7 +65,7 @@ void updateDpad() {
 
 void updateButton() {
   for (int i = 0; i <= 5; i++) {
-    int currentButtonState = !digitalRead(i + 2);
+    int currentButtonState = !digitalRead(i + OFFSET_BUTTON);
     if (currentButtonState != lastButtonState[i]) {
       Joystick.setButton(i, currentButtonState);
       lastButtonState[i] = currentButtonState;
